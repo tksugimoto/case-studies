@@ -149,16 +149,11 @@ JavaScriptにおける非同期処理関数の代表例に `setTimeout(callback[
   ```javascript
   // 一連の処理をメソッドチェインで記述した場合
   const result = getAuthAsync(authClient, {'userId': '0001'})
-    .then((authResult) => {
-      getSearchHistoryAsync(dbClient, {'userId': authResult.id, 'roll': authResult.userRoll})
-        .then((dbResult) => {
-          getRecommendAsync(recClient, {'histories': dbResult})
-            .then((result) => {
-              ...
-            })
-            .catch((err) => { ... })
-        })
-        .catch((err) => { ... })
+    .then((authResult) => getSearchHistoryAsync(dbClient, {'userId': authResult.id, 'roll': authResult.userRoll}))
+    .then((dbResult) => getRecommendAsync(recClient, {'histories': dbResult}))
+    .then((result) => {
+      //...
+      // authResult や dbResult をここで使わないならば、 ネストしないで メソッドチェイン で書けるのでは
     })
     .catch((err) => {
       throw new Error(err)
